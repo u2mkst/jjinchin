@@ -22,9 +22,11 @@ type Status =
   | "not_found"
   | "invite_wait"
   | "join"
+  | "joining"
   | "full"
   | "analyzing"
-  | "result";
+  | "result"
+  | "error";
 
 export function SessionView({ id }: { id: string }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -53,21 +55,37 @@ export function SessionView({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    // 최초 마운트 시 localStorage(외부 시스템)에서 세션 상태를 동기화한다.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    resolveStatus(getSession(id));
+    let cancelled = false;
 
-    const unsubscribe = subscribeToSession(id, (updated) => {
-      setSession(updated);
-      // 대기 중일 때만 자동으로 상태를 갱신 (참여 흐름 도중엔 방해하지 않음)
-      setStatus((prevStatus) => {
-        if (prevStatus !== "invite_wait") return prevStatus;
-        if (updated?.participantB) return "analyzing";
-        return prevStatus;
+    getSession(id)
+      .then((current) => {
+        if (!cancelled) resolveStatus(current);
+      })
+      .catch(() => {
+        if (!cancelled) setStatus("error");
       });
-    });
 
-    return unsubscribe;
+    let unsubscribe = () => {};
+    try {
+      unsubscribe = subscribeToSession(id, (updated) => {
+        setSession(updated);
+        // 대기 중일 때만 자동으로 상태를 갱신 (참여 흐름 도중엔 방해하지 않음)
+        setStatus((prevStatus) => {
+          if (prevStatus !== "invite_wait") return prevStatus;
+          if (updated?.participantB) return "analyzing";
+          return prevStatus;
+        });
+      });
+    } catch {
+      // Supabase 미설정 등 구독 자체가 실패한 경우 (외부 시스템 연결 실패를 즉시 반영)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setStatus("error");
+    }
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -77,19 +95,33 @@ export function SessionView({ id }: { id: string }) {
     return () => clearTimeout(timer);
   }, [status]);
 
-  function handleJoinComplete(answers: AnswerMap, predictions: PredictionMap) {
+  async function handleJoinComplete(
+    answers: AnswerMap,
+    predictions: PredictionMap,
+  ) {
     if (!nickname) return;
-    const outcome = joinSession(id, nickname, answers, predictions);
-    if (!outcome.ok) {
-      setStatus(outcome.error === "full" ? "full" : "not_found");
-      return;
+    setStatus("joining");
+    try {
+      const outcome = await joinSession(id, nickname, answers, predictions);
+      if (!outcome.ok) {
+        setStatus(outcome.error === "full" ? "full" : "not_found");
+        return;
+      }
+      setSession(outcome.session);
+      setStatus("analyzing");
+    } catch {
+      setStatus("error");
     }
-    setSession(outcome.session);
-    setStatus("analyzing");
   }
 
   if (status === "loading") {
     return <div className="flex flex-1 items-center justify-center" />;
+  }
+
+  if (status === "error") {
+    return (
+      <ErrorScreen message="일시적인 오류가 발생했어요. 잠시 후 다시 시도해주세요." />
+    );
   }
 
   if (status === "not_found") {
@@ -139,7 +171,7 @@ export function SessionView({ id }: { id: string }) {
     );
   }
 
-  if (status === "join" && session) {
+  if ((status === "join" || status === "joining") && session) {
     if (!nickname) {
       return (
         <NicknameForm
@@ -148,6 +180,16 @@ export function SessionView({ id }: { id: string }) {
           submitLabel="질문 시작하기"
           onSubmit={setNickname}
         />
+      );
+    }
+    if (status === "joining") {
+      return (
+        <div className="paper-card flex flex-1 flex-col items-center justify-center gap-3 rounded-2xl p-8 text-center">
+          <div className="h-10 w-10 animate-spin-slow rounded-full border-4 border-brand/20 border-t-brand" />
+          <p className="text-sm font-semibold text-foreground/70">
+            답변을 제출하는 중...
+          </p>
+        </div>
       );
     }
     return (

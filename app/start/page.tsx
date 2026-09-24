@@ -11,11 +11,31 @@ import type { AnswerMap, PredictionMap } from "@/lib/types";
 export default function StartPage() {
   const router = useRouter();
   const [nickname, setNickname] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleComplete(answers: AnswerMap, predictions: PredictionMap) {
+  async function handleComplete(answers: AnswerMap, predictions: PredictionMap) {
     if (!nickname) return;
-    const session = createSession(nickname, answers, predictions);
-    router.push(`/s/${session.id}`);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const session = await createSession(nickname, answers, predictions);
+      router.push(`/s/${session.id}`);
+    } catch {
+      setError("테스트를 만드는 중 문제가 발생했어요. 다시 시도해주세요.");
+      setSubmitting(false);
+    }
+  }
+
+  if (submitting) {
+    return (
+      <div className="paper-card flex flex-1 flex-col items-center justify-center gap-3 rounded-2xl p-8 text-center">
+        <div className="h-10 w-10 animate-spin-slow rounded-full border-4 border-brand/20 border-t-brand" />
+        <p className="text-sm font-semibold text-foreground/70">
+          테스트를 만드는 중...
+        </p>
+      </div>
+    );
   }
 
   if (!nickname) {
@@ -30,10 +50,17 @@ export default function StartPage() {
   }
 
   return (
-    <QuestionFlow
-      questions={QUESTIONS}
-      nickname={nickname}
-      onComplete={handleComplete}
-    />
+    <div className="flex flex-1 flex-col gap-3">
+      {error && (
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-500">
+          {error}
+        </p>
+      )}
+      <QuestionFlow
+        questions={QUESTIONS}
+        nickname={nickname}
+        onComplete={handleComplete}
+      />
+    </div>
   );
 }
