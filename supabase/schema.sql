@@ -5,7 +5,8 @@ create extension if not exists "pgcrypto";
 
 create table if not exists sessions (
   id text primary key,
-  question_set text not null default 'default',
+  -- 질문팩 id: 'friend' | 'couple' | 'coworker' (data/questionPacks.ts 참고)
+  question_set text not null default 'friend',
   created_at timestamptz not null default now(),
   expires_at timestamptz not null default (now() + interval '7 days')
 );

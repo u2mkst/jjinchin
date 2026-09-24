@@ -7,7 +7,8 @@ import { NicknameForm } from "@/components/NicknameForm";
 import { QuestionFlow } from "@/components/QuestionFlow";
 import { ResultCard } from "@/components/ResultCard";
 import { ShareLinks } from "@/components/ShareLinks";
-import { QUESTIONS } from "@/data/questions";
+import { SoloCard } from "@/components/SoloCard";
+import { getPackById } from "@/data/questionPacks";
 import { computeResult } from "@/lib/scoring";
 import {
   getMyParticipantId,
@@ -134,7 +135,7 @@ export function SessionView({ id }: { id: string }) {
     );
   }
 
-  if (status === "invite_wait" && session) {
+  if (status === "invite_wait" && session?.participantA) {
     const shareUrl =
       typeof window !== "undefined"
         ? `${window.location.origin}/s/${id}`
@@ -146,23 +147,28 @@ export function SessionView({ id }: { id: string }) {
             초대 링크 준비 완료
           </p>
           <h1 className="mt-3 font-display text-3xl text-brand">
-            {session.participantA?.nickname}님의 결과가 잠겨있어요
+            {session.participantA.nickname}님, 친구를 기다리는 동안
           </h1>
           <p className="mt-2 text-sm text-foreground/60">
-            친구가 링크로 들어와서 같은 질문에 답하면 결과가 열려요
+            내 성향 카드는 먼저 확인하고, 친구가 들어오면 찐친력 점수까지 열려요
           </p>
         </header>
 
-        <div className="paper-card relative flex flex-1 rotate-1 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl p-6 text-center">
-          <span className="tape" />
+        <SoloCard
+          nickname={session.participantA.nickname}
+          packId={session.questionSet}
+          answers={session.participantA.answers}
+        />
+
+        <div className="paper-card relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl p-5 text-center">
           <div className="pointer-events-none select-none blur-md">
-            <p className="font-display text-6xl text-brand">87점</p>
-            <p className="mt-2 font-display text-lg text-foreground">
+            <p className="font-display text-4xl text-brand">87점</p>
+            <p className="mt-1 font-display text-base text-foreground">
               겉바속촉 이해심 만렙
             </p>
           </div>
-          <p className="absolute inset-x-6 bottom-6 text-sm font-semibold text-foreground/70">
-            🔒 친구가 참여하면 결과가 공개돼요
+          <p className="absolute inset-x-4 bottom-4 text-xs font-semibold text-foreground/70">
+            🔒 친구가 참여하면 찐친력 결과가 공개돼요
           </p>
         </div>
 
@@ -197,7 +203,7 @@ export function SessionView({ id }: { id: string }) {
     }
     return (
       <QuestionFlow
-        questions={QUESTIONS}
+        questions={getPackById(session.questionSet).questions}
         nickname={nickname}
         onComplete={handleJoinComplete}
       />
@@ -209,7 +215,13 @@ export function SessionView({ id }: { id: string }) {
   }
 
   if (status === "result" && session?.participantA && session.participantB) {
-    const result = computeResult(session.participantA, session.participantB);
+    const pack = getPackById(session.questionSet);
+    const result = computeResult(
+      session.participantA,
+      session.participantB,
+      pack.questions,
+      pack.id,
+    );
     return (
       <div className="flex flex-1 flex-col gap-6">
         <ResultCard

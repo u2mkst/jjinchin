@@ -1,9 +1,9 @@
-import { QUESTIONS } from "@/data/questions";
 import { pickResultTag } from "@/data/resultTags";
 import type {
   JjinchinResult,
   Participant,
   PerQuestionBreakdown,
+  Question,
 } from "@/lib/types";
 
 const MATCH_WEIGHT = 0.4;
@@ -12,6 +12,8 @@ const UNDERSTAND_WEIGHT = 0.6;
 export function computeResult(
   a: Participant,
   b: Participant,
+  questions: Question[],
+  packId: string = "friend",
 ): JjinchinResult {
   const breakdown: PerQuestionBreakdown[] = [];
   let matchCount = 0;
@@ -23,7 +25,7 @@ export function computeResult(
 
   let bestMatchId: string | null = null;
 
-  for (const question of QUESTIONS) {
+  for (const question of questions) {
     const aAnswer = a.answers[question.id];
     const bAnswer = b.answers[question.id];
     if (aAnswer === undefined || bAnswer === undefined) continue;
@@ -82,7 +84,7 @@ export function computeResult(
     (matchRate * MATCH_WEIGHT + understandRate * UNDERSTAND_WEIGHT) * 100,
   );
 
-  const tag = pickResultTag(score, matchRate, understandRate);
+  const tag = pickResultTag(score, matchRate, understandRate, packId);
 
   return {
     matchRate,

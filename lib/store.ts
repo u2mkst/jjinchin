@@ -42,6 +42,7 @@ interface SessionRow {
   id: string;
   created_at: string;
   expires_at: string;
+  question_set: string;
 }
 
 function mapParticipant(row: ParticipantRow): Participant {
@@ -77,7 +78,7 @@ export async function getSession(sessionId: string): Promise<Session | null> {
 
   const { data: sessionRow, error: sessionError } = await db
     .from("sessions")
-    .select("id, created_at, expires_at")
+    .select("id, created_at, expires_at, question_set")
     .eq("id", sessionId)
     .maybeSingle<SessionRow>();
 
@@ -99,6 +100,7 @@ export async function getSession(sessionId: string): Promise<Session | null> {
     id: sessionRow.id,
     createdAt: sessionRow.created_at,
     expiresAt: sessionRow.expires_at,
+    questionSet: sessionRow.question_set,
     participantA: participantA ? mapParticipant(participantA) : null,
     participantB: participantB ? mapParticipant(participantB) : null,
   };
@@ -108,6 +110,7 @@ export async function createSession(
   nickname: string,
   answers: AnswerMap,
   predictions: PredictionMap,
+  packId: string,
 ): Promise<Session> {
   const db = requireSupabase();
   const sessionId = generateId();
@@ -116,7 +119,7 @@ export async function createSession(
 
   const { error: sessionError } = await db
     .from("sessions")
-    .insert({ id: sessionId });
+    .insert({ id: sessionId, question_set: packId });
   if (sessionError) {
     throw new Error(`세션 생성 실패: ${sessionError.message}`);
   }

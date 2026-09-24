@@ -3,23 +3,25 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NicknameForm } from "@/components/NicknameForm";
+import { PackPicker } from "@/components/PackPicker";
 import { QuestionFlow } from "@/components/QuestionFlow";
-import { QUESTIONS } from "@/data/questions";
+import { getPackById } from "@/data/questionPacks";
 import { createSession } from "@/lib/store";
 import type { AnswerMap, PredictionMap } from "@/lib/types";
 
 export default function StartPage() {
   const router = useRouter();
+  const [packId, setPackId] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleComplete(answers: AnswerMap, predictions: PredictionMap) {
-    if (!nickname) return;
+    if (!nickname || !packId) return;
     setSubmitting(true);
     setError(null);
     try {
-      const session = await createSession(nickname, answers, predictions);
+      const session = await createSession(nickname, answers, predictions, packId);
       router.push(`/s/${session.id}`);
     } catch {
       setError("테스트를 만드는 중 문제가 발생했어요. 다시 시도해주세요.");
@@ -36,6 +38,10 @@ export default function StartPage() {
         </p>
       </div>
     );
+  }
+
+  if (!packId) {
+    return <PackPicker onSelect={setPackId} />;
   }
 
   if (!nickname) {
@@ -57,7 +63,7 @@ export default function StartPage() {
         </p>
       )}
       <QuestionFlow
-        questions={QUESTIONS}
+        questions={getPackById(packId).questions}
         nickname={nickname}
         onComplete={handleComplete}
       />

@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { getCompletedPairCount } from "@/lib/stats";
 
-export default function LandingPage() {
+export const revalidate = 60;
+
+export default async function LandingPage() {
+  const pairCount = await getCompletedPairCount();
+
   return (
     <div className="flex flex-1 flex-col gap-8">
       <header className="pt-8 text-center">
@@ -16,6 +21,11 @@ export default function LandingPage() {
           <br />
           서로를 얼마나 아는지 점수로 확인해보세요.
         </p>
+        {pairCount !== null && pairCount > 0 && (
+          <p className="sticker mx-auto mt-4 rotate-1 bg-white px-3 py-1 text-xs font-bold text-brand-dark">
+            🔥 지금까지 {pairCount.toLocaleString("ko-KR")}쌍이 확인했어요
+          </p>
+        )}
       </header>
 
       <div className="paper-card mx-auto flex w-full max-w-[240px] rotate-2 flex-col items-center gap-2 rounded-2xl p-5 text-center">

@@ -35,6 +35,24 @@ npm run dev
 | F10 | 결과 카드 저장/공유, OG 미리보기 | ✅ `html-to-image` 저장 + `app/s/[id]/page.tsx`의 `generateMetadata` |
 | F11 | 7일 후 자동 삭제 | ✅ 조회 시 만료 체크(`lib/store.ts`) + Supabase `pg_cron` 매일 03:00 UTC 삭제 job |
 | 1인 맛보기 | 5문항 밈 카드 | ✅ `app/mini` |
+| P3 | 관계별 질문팩 (친구/커플/직장동료) | ✅ `data/questionPacks.ts`, `components/PackPicker.tsx` |
+| 바이럴 장치 | 혼자여도 받는 성향 카드 (이탈 방지) | ✅ `components/SoloCard.tsx`, `data/soloInsights.ts` |
+| 바이럴 장치 | 실시간 참여자 수 소셜프루프 | ✅ `lib/stats.ts` (랜딩 페이지, 60초 ISR) |
+
+### 관계별 질문팩
+
+`/start`에서 닉네임 입력 전에 "친구 / 커플 / 직장동료" 중 하나를 고릅니다.
+각 팩은 서로 다른 10문항(A형 7 + B형 3)과 결과 문구(`data/resultTags.ts`)를
+갖고 있어, 같은 로직으로 세 가지 관계 모두를 커버합니다. 세션의
+`question_set` 컬럼에 선택한 팩 id가 저장되고, 친구가 링크로 참여할 때도
+같은 팩의 질문이 자동으로 로드됩니다.
+
+### 혼자여도 받는 성향 카드
+
+친구가 아직 참여하지 않았어도(`invite_wait` 화면), 내 답변만으로 만든
+"미리보는 성향" 카드를 바로 보여주고 별도로 저장/공유할 수 있게 했습니다.
+계획서 7번(바이럴 장치)에 있었지만 미구현이었던 "혼자 한 결과도 제공"을
+구현한 것으로, 상대가 안 와도 빈손으로 이탈하지 않도록 하는 장치입니다.
 
 ### 데이터 저장소: Supabase (PostgreSQL)
 
@@ -72,9 +90,11 @@ app/
   s/[id]/           # 초대 · 대기 · 참여 · 결과 (F4~F10)
   mini/             # 1인 맛보기
   privacy/          # 개인정보 처리방침
-components/         # NicknameForm, QuestionFlow, ShareLinks, LoadingAnalysis, ResultCard
-data/               # 질문, 결과 문구(관계 별명), 1인 맛보기 문항/결과
-lib/                # 타입, 점수 계산, 저장소(store), id 생성, supabase 클라이언트
+components/         # NicknameForm, PackPicker, QuestionFlow, ShareLinks,
+                    # LoadingAnalysis, ResultCard, SoloCard
+data/               # 질문팩(friend/couple/coworker), 결과 문구(관계 별명, 팩별),
+                    # 혼자 성향 카드 문구, 1인 맛보기 문항/결과
+lib/                # 타입, 점수 계산, 저장소(store), id 생성, supabase 클라이언트, 통계(stats)
 supabase/schema.sql # Supabase 전환 시 사용할 테이블 스키마
 ```
 

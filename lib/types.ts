@@ -28,6 +28,8 @@ export interface Session {
   id: string;
   createdAt: string;
   expiresAt: string;
+  /** 질문팩 id (예: "friend" | "couple" | "coworker") */
+  questionSet: string;
   participantA: Participant | null;
   participantB: Participant | null;
 }
