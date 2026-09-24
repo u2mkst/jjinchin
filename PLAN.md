@@ -210,7 +210,7 @@ jjinchin/
 ## 15. 지금 결정/준비할 것
 - [ ] 도메인 결정 (영문 표기 후보: `jjinchin`, `jjinryeok` 등, 가용 여부 확인)
 - [x] Supabase 계정·프로젝트 생성 (직접 가입 필요) — `jjinchin` 프로젝트 생성 및 스키마 연동 완료
-- [ ] Vercel 계정, GitHub 저장소 생성
+- [x] Vercel 계정, GitHub 저장소 생성 — https://jjinchin-five.vercel.app 배포 완료 (GitHub 자동 연동은 README 참고)
 - [ ] Node.js 설치 확인
 - [ ] 질문 10개, 결과 문구 40종 초안 작성
 - [ ] KIPRIS에서 "찐친력" 상표 조회

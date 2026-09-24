@@ -2,6 +2,8 @@
 
 > 친구와 링크 하나로 함께 답하고, 서로를 얼마나 아는지 "찐친력 점수"로 보여주는 2인용 테스트.
 
+**배포 주소: https://jjinchin-five.vercel.app**
+
 전체 기획은 [`PLAN.md`](./PLAN.md)를 참고하세요.
 
 ## 시작하기
@@ -76,13 +78,33 @@ lib/                # 타입, 점수 계산, 저장소(store), id 생성, supaba
 supabase/schema.sql # Supabase 전환 시 사용할 테이블 스키마
 ```
 
+## 배포 (Vercel)
+
+- 프로젝트: `jjinchin` (Vercel 계정 `yhwings21-4601`)
+- 프로덕션 URL: **https://jjinchin-five.vercel.app**
+- 환경변수(`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`)는
+  Production/Preview/Development 모두에 등록되어 있습니다.
+- Vercel Authentication(SSO Protection)은 꺼뒀습니다 — 이 서비스는 회원가입
+  없이 링크만으로 접속해야 하므로, 기본으로 켜져 있던 로그인 보호를 그대로
+  두면 친구가 링크를 열었을 때 Vercel 로그인 화면이 뜨는 문제가 있었습니다.
+- **GitHub 저장소 연동(브랜치 push 시 자동 배포)은 아직 안 되어 있습니다.**
+  Vercel MCP 연동 토큰이 이 계정의 팀 스코프(`yhwings21-4601s-projects`)에서
+  "프로젝트-저장소 연결 조회" 같은 일부 API 호출에 403(재인증 필요)을
+  반환해, `create_git_project`로 자동 연동을 만들지 못했습니다. 지금은 현재
+  커밋(`d90bba3`)을 GitHub에서 직접 가져와(`gitSource`) 1회성으로
+  배포한 상태입니다. 앞으로 push할 때마다 자동 배포되게 하려면, Vercel
+  대시보드 → 프로젝트 `jjinchin` → Settings → Git 에서 `u2mkst/jjinchin`
+  저장소를 직접 연결해주세요 (혹은 Vercel 계정을 한 번 재인증하면 같은
+  작업을 다시 시도해볼 수 있습니다).
+- 이후 코드를 바꾼 뒤 다시 배포하려면, 저장소를 연결하기 전까지는 Vercel
+  MCP의 `create_deployment`를 최신 커밋 SHA로 다시 호출해야 합니다.
+
 ## 아직 안 한 것 (다음 단계)
 
+- GitHub ↔ Vercel 자동 배포 연동 (위 참고)
 - 카카오톡 공유 SDK (현재는 Web Share API + 링크 복사만 지원)
 - 관계 별명 문구 확장 (현재 15종 → 계획서 목표 30~50종)
 - 지인 테스트를 통한 문구/난이도 튜닝
-- Vercel 배포 시 `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  환경변수 등록
 
 ### 알려진 제약: 이 개발 환경에서는 Supabase 실연동을 브라우저로 확인하지 못함
 
