@@ -142,10 +142,10 @@ export function SessionView({ id }: { id: string }) {
     return (
       <div className="flex flex-1 flex-col gap-6">
         <header className="text-center">
-          <p className="text-sm font-bold tracking-widest text-brand uppercase">
+          <p className="sticker mx-auto -rotate-2 bg-accent-lavender px-3 py-1 text-xs font-bold text-brand-dark uppercase">
             초대 링크 준비 완료
           </p>
-          <h1 className="mt-2 text-2xl font-bold">
+          <h1 className="mt-3 font-display text-3xl text-brand">
             {session.participantA?.nickname}님의 결과가 잠겨있어요
           </h1>
           <p className="mt-2 text-sm text-foreground/60">
@@ -153,10 +153,13 @@ export function SessionView({ id }: { id: string }) {
           </p>
         </header>
 
-        <div className="paper-card relative flex flex-1 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl p-6 text-center">
+        <div className="paper-card relative flex flex-1 rotate-1 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl p-6 text-center">
+          <span className="tape" />
           <div className="pointer-events-none select-none blur-md">
-            <p className="text-6xl font-black text-brand">87점</p>
-            <p className="mt-2 text-lg font-bold">겉바속촉 이해심 만렙</p>
+            <p className="font-display text-6xl text-brand">87점</p>
+            <p className="mt-2 font-display text-lg text-foreground">
+              겉바속촉 이해심 만렙
+            </p>
           </div>
           <p className="absolute inset-x-6 bottom-6 text-sm font-semibold text-foreground/70">
             🔒 친구가 참여하면 결과가 공개돼요
@@ -234,10 +237,11 @@ export function SessionView({ id }: { id: string }) {
 function ErrorScreen({ message }: { message: string }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
+      <span className="text-4xl">🥲</span>
       <p className="text-base text-foreground/70">{message}</p>
       <Link
         href="/start"
-        className="rounded-xl bg-brand px-4 py-3 text-sm font-bold text-white"
+        className="rounded-xl bg-brand px-4 py-3 text-sm font-bold text-white transition-transform hover:-rotate-1 active:scale-95 active:rotate-0"
       >
         새로 시작하기
       </Link>

@@ -38,9 +38,9 @@ export function ShareLinks({ url, text, title = "찐친력" }: ShareLinksProps) 
       <button
         type="button"
         onClick={handleShare}
-        className="rounded-xl bg-brand px-4 py-3 text-base font-bold text-white transition-transform active:scale-95"
+        className="rounded-xl bg-brand px-4 py-3 text-base font-bold text-white transition-transform hover:-rotate-1 active:scale-95 active:rotate-0"
       >
-        친구에게 초대 링크 보내기
+        친구에게 초대 링크 보내기 💌
       </button>
       <button
         type="button"

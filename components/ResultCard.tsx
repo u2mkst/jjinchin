@@ -47,9 +47,10 @@ export function ResultCard({ a, b, result }: ResultCardProps) {
         className="paper-card flex aspect-[9/16] w-full max-w-xs flex-col justify-between rounded-2xl p-6"
         style={{ background: "#fffdf8" }}
       >
+        <span className="tape" />
         <div>
           <p className="text-xs font-bold tracking-widest text-brand uppercase">
-            찐친력 성적표
+            ✨ 찐친력 성적표 ✨
           </p>
           <p className="mt-1 text-sm font-semibold text-foreground/60">
             {a.nickname} × {b.nickname}
@@ -57,14 +58,16 @@ export function ResultCard({ a, b, result }: ResultCardProps) {
         </div>
 
         <div className="flex flex-col items-center gap-2 text-center">
-          <span className="animate-score-in text-6xl font-black text-brand">
+          <span className="animate-score-in font-display text-7xl text-brand">
             {result.score}
-            <span className="text-2xl">점</span>
+            <span className="text-3xl">점</span>
           </span>
-          <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-brand-dark">
+          <span className="sticker -rotate-2 bg-accent px-3 py-1 text-xs font-bold text-brand-dark">
             {result.tag.grade}등급
           </span>
-          <h3 className="mt-2 text-lg font-bold">{result.tag.title}</h3>
+          <h3 className="mt-2 font-display text-2xl text-foreground">
+            {result.tag.title}
+          </h3>
           <p className="text-sm text-foreground/70">{result.tag.line}</p>
         </div>
 
@@ -96,9 +99,9 @@ export function ResultCard({ a, b, result }: ResultCardProps) {
         type="button"
         onClick={handleDownload}
         disabled={saving}
-        className="w-full max-w-xs rounded-xl bg-brand-dark px-4 py-3 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-50"
+        className="w-full max-w-xs rounded-xl bg-brand-dark px-4 py-3 text-sm font-bold text-white transition-transform hover:-rotate-1 active:scale-95 active:rotate-0 disabled:opacity-50"
       >
-        {saving ? "저장 중..." : "카드 이미지 저장"}
+        {saving ? "저장 중..." : "📸 카드 이미지 저장"}
       </button>
     </div>
   );

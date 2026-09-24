@@ -5,7 +5,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <div className="flex flex-1 flex-col gap-4 py-4 text-sm leading-relaxed text-foreground/80">
-      <h1 className="text-xl font-bold text-foreground">개인정보 처리방침</h1>
+      <h1 className="font-display text-2xl text-brand">개인정보 처리방침</h1>
       <p>
         찐친력(이하 &quot;서비스&quot;)은 회원가입 없이 이용할 수 있으며,
         테스트 진행을 위해 아래 정보만 최소한으로 수집합니다.

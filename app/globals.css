@@ -1,12 +1,32 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "IsYun";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff")
+    format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2")
+    format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+
 :root {
   --background: #fff6e9;
   --foreground: #221a3b;
   --brand: #ff3e78;
   --brand-dark: #221a3b;
   --accent: #ffd23f;
+  --accent-mint: #7cf5c4;
+  --accent-lavender: #b298ff;
   --paper: #fffdf8;
+  --font-body: "Paperozi", var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-hand: "IsYun", var(--font-body);
 }
 
 @theme inline {
@@ -15,21 +35,65 @@
   --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
   --color-accent: var(--accent);
+  --color-accent-mint: var(--accent-mint);
+  --color-accent-lavender: var(--accent-lavender);
   --color-paper: var(--paper);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-hand);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 10% 6%, rgba(255, 62, 120, 0.13) 0%, transparent 40%),
+    radial-gradient(circle at 92% 12%, rgba(124, 245, 196, 0.3) 0%, transparent 38%),
+    radial-gradient(circle at 85% 90%, rgba(178, 152, 255, 0.28) 0%, transparent 42%),
+    radial-gradient(rgba(34, 26, 59, 0.05) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    auto,
+    16px 16px;
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
+/* 다이어리 성적표 카드: 두꺼운 외곽선 + 정직한 하드 섀도우 */
 .paper-card {
+  position: relative;
   background: var(--paper);
+  border: 2.5px solid var(--brand-dark);
+  box-shadow: 5px 5px 0 var(--brand-dark);
+}
+
+/* 스티커/뱃지 스타일 알약 */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   border: 2px solid var(--brand-dark);
-  box-shadow: 4px 4px 0 var(--brand-dark);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--brand-dark);
+  font-family: var(--font-sans);
+}
+
+/* 카드 위쪽 마스킹테이프 장식 */
+.tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 68px;
+  height: 24px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: rgba(124, 245, 196, 0.85);
+  border: 2px solid var(--brand-dark);
+}
+
+.tape-r {
+  background: rgba(178, 152, 255, 0.85);
+  transform: translateX(-50%) rotate(4deg);
 }
 
 @keyframes count-up-pulse {
@@ -58,4 +122,33 @@ body {
 
 .animate-spin-slow {
   animation: spin-slow 1.4s linear infinite;
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+.animate-wiggle {
+  display: inline-block;
+  animation: wiggle 1.6s ease-in-out infinite;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: float-y 2.4s ease-in-out infinite;
 }

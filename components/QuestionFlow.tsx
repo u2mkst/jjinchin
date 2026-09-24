@@ -92,17 +92,17 @@ export function QuestionFlow({
       </div>
 
       <div className="paper-card flex flex-1 flex-col gap-5 rounded-2xl p-5">
-        <p className="text-xs font-bold uppercase tracking-wide text-brand">
+        <span className="sticker -rotate-2 self-start bg-accent-lavender px-3 py-1 text-xs font-bold text-brand-dark uppercase">
           {step.question.topic}
-        </p>
-        <h2 className="text-xl leading-snug font-bold">
+        </span>
+        <h2 className="font-display text-2xl leading-snug text-foreground">
           {step.type === "predict"
             ? `${nickname}의 친구라면, "${step.question.text}"`
             : step.question.text}
         </h2>
         {step.type === "predict" && (
           <p className="-mt-3 text-sm text-foreground/60">
-            내 친구는 이렇게 답할 것 같아요
+            🔮 내 친구는 이렇게 답할 것 같아요
           </p>
         )}
 
@@ -112,12 +112,13 @@ export function QuestionFlow({
               key={index}
               type="button"
               onClick={() => choose(index)}
-              className={`rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition-colors ${
+              className={`rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition-all ${
                 currentValue === index
-                  ? "border-brand bg-brand/10"
-                  : "border-black/10 bg-white hover:border-brand/50"
+                  ? "border-brand bg-brand/10 shadow-[3px_3px_0_var(--brand)]"
+                  : "border-black/10 bg-white hover:border-brand/50 hover:-translate-y-0.5"
               }`}
             >
+              {currentValue === index ? "✅ " : ""}
               {option}
             </button>
           ))}

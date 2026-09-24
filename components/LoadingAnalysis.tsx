@@ -21,8 +21,9 @@ export function LoadingAnalysis() {
 
   return (
     <div className="paper-card flex flex-1 flex-col items-center justify-center gap-6 rounded-2xl p-8 text-center">
+      <span className="animate-wiggle text-4xl">🔮</span>
       <div className="h-14 w-14 animate-spin-slow rounded-full border-4 border-brand/20 border-t-brand" />
-      <p className="text-lg font-bold">분석 중...</p>
+      <p className="font-display text-2xl text-brand">분석 중...</p>
       <p className="text-sm text-foreground/60">{MESSAGES[messageIndex]}</p>
     </div>
   );

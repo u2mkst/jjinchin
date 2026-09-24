@@ -21,20 +21,21 @@ export default function MiniPage() {
     const persona = getMiniPersona(answers);
     return (
       <div className="flex flex-1 flex-col gap-6">
-        <div className="paper-card flex flex-1 flex-col items-center justify-center gap-3 rounded-2xl p-6 text-center">
+        <div className="paper-card flex flex-1 rotate-1 flex-col items-center justify-center gap-3 rounded-2xl p-6 text-center">
+          <span className="tape tape-r" />
           <p className="text-xs font-bold tracking-widest text-brand uppercase">
             나 이럴 때 이런 사람
           </p>
-          <p className="text-6xl">{persona.emoji}</p>
-          <h1 className="text-2xl font-bold">{persona.title}</h1>
+          <p className="animate-float text-6xl">{persona.emoji}</p>
+          <h1 className="font-display text-3xl text-brand">{persona.title}</h1>
           <p className="text-sm text-foreground/70">{persona.line}</p>
         </div>
 
         <Link
           href="/start"
-          className="rounded-xl bg-brand px-4 py-4 text-center text-lg font-bold text-white transition-transform active:scale-95"
+          className="rounded-xl bg-brand px-4 py-4 text-center text-lg font-bold text-white transition-transform hover:-rotate-1 active:scale-95 active:rotate-0"
         >
-          친구와 찐친력도 재볼래?
+          친구와 찐친력도 재볼래? 🔥
         </Link>
         <Link
           href="/"

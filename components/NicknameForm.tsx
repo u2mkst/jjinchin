@@ -45,7 +45,7 @@ export function NicknameForm({
       className="paper-card flex flex-1 flex-col justify-center gap-5 rounded-2xl p-6"
     >
       <div>
-        <h1 className="text-2xl font-bold">{title}</h1>
+        <h1 className="font-display text-3xl text-brand">{title}</h1>
         {description && (
           <p className="mt-2 text-sm text-foreground/60">{description}</p>
         )}
