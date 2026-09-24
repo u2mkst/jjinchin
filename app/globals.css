@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fff6e9;
+  --foreground: #221a3b;
+  --brand: #ff3e78;
+  --brand-dark: #221a3b;
+  --accent: #ffd23f;
+  --paper: #fffdf8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-accent: var(--accent);
+  --color-paper: var(--paper);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.paper-card {
+  background: var(--paper);
+  border: 2px solid var(--brand-dark);
+  box-shadow: 4px 4px 0 var(--brand-dark);
+}
+
+@keyframes count-up-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-score-in {
+  animation: count-up-pulse 0.6s ease-out both;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 1.4s linear infinite;
+}
